@@ -1,29 +1,31 @@
 # Cairn Ledger
 
-**让你对 Agent 的纠正，留下一本可以回看的账。**
+**English** · [简体中文](README.zh-CN.md)
 
-从本机 Claude Code 与 Codex 会话中识别「做法被纠正」的时刻，按类别汇总次数，并保留短摘录与原文定位。你可以看到哪些问题反复发生，再决定要不要调整规则。
+**A local correction ledger for AI agent sessions.**
 
-![纠正记录的阅读示意，全部为虚构数据](docs/assets/ledger-preview.png)
+Cairn Ledger identifies user corrections to agent behavior in local Claude Code and Codex transcripts. It groups corrections by category, counts recurring issues, and preserves short excerpts with source references for review.
 
-*示意预览，全部为虚构数据。实际产出为 Markdown 表格；[查看完整示例](docs/example-output.md)。*
+![Illustrative correction ledger using fictional data](docs/assets/ledger-preview.en.svg)
 
-[试用演示](#先看产出) · [开始使用](#开始使用) · [配置与后台运行](docs/setup.md) · [机制与边界](docs/how-it-works.md)
+*Illustrative preview using fictional data. Runtime output is currently in Chinese; [view the complete sample](docs/example-output.md).*
 
-## 它会记下什么
+[Offline demo](#offline-demo) · [Getting started](#getting-started) · [Setup and operations](docs/setup.md) · [How it works](docs/how-it-works.md)
 
-| 会话中的信号 | 处理方式 |
+## What gets recorded
+
+| Signal in a conversation | Treatment |
 | --- | --- |
-| 用户指出 Agent 擅自扩大范围、忽略约定或做错了方法 | 作为纠正候选，分类并校验后入账 |
-| 「标题改短一点」这样的普通内容编辑 | 不入账 |
-| 补充事实、新任务、初始约束 | 不入账 |
-| 缺少上下文，无法确认是否为纠正 | 不入账 |
+| The user corrects an agent's approach, such as expanding scope or ignoring an agreement | Considered for classification; recorded after local validation |
+| Routine content edits, such as shortening a title | Not recorded |
+| Additional facts, new tasks, or initial constraints | Not recorded |
+| Insufficient context to establish a correction | Not recorded |
 
-同一条原始消息最多计 1 次。重新扫描不会重复计数。它提供记录和定位，**不会自动修改你的规则**。
+Each original user message counts at most once. Repeated scans do not duplicate events. The ledger provides records and source references; **it does not modify your rules automatically**.
 
-## 先看产出
+## Offline demo
 
-macOS、Python 3.9+。演示只生成虚构数据，不需要 Codex 登录，不读取会话，不调用模型。
+Requires macOS and Python 3.9+. The demo uses fictional data and needs no Codex login. It does not read transcripts or call a model.
 
 ```sh
 git clone https://github.com/alexliu072903-bit/cairn-ledger.git
@@ -31,21 +33,21 @@ cd cairn-ledger
 python3 docs/demo.py
 ```
 
-命令会输出 `regressions.md` 的临时路径。用 Markdown 编辑器打开，就能看到类别、次数、首次与最近时间、来源、对应规则和摘录。演示中的定位同样为虚构内容。
+The command prints the path to a temporary `regressions.md`. Open it in a Markdown editor to review categories, counts, first and latest occurrence times, sources, rule references, and excerpts. All source references in the demo are fictional. Demo and runtime output are currently in Chinese.
 
-## 开始使用
+## Getting started
 
-真实会话分类还需要：已登录的 Codex CLI，以及本机 Claude Code 或 Codex transcript。当前为早期版本，日志格式和深链兼容性仍有限制，详见[覆盖范围](docs/how-it-works.md#覆盖范围)。
+Processing real transcripts also requires an authenticated Codex CLI and local Claude Code or Codex transcripts. This is an early version: transcript formats and session deep links have compatibility limits. See [coverage and limitations](docs/how-it-works.md#覆盖范围).
 
-**1. 安装到仓库外。**
+### 1. Install outside the source repository
 
 ```sh
 python3 install.py
 ```
 
-代码复制到 `~/.codex/ledger/`。已有配置与数据保留，旧代码先备份；安装不会启动服务，分类默认关闭。
+Code is copied to `~/.codex/ledger/`. Existing configuration and data are preserved, and previous code is backed up. Installation does not start a service; classification is disabled by default.
 
-**2. 准备输出与规则目录，编辑配置。**
+### 2. Prepare directories and configure the installation
 
 ```sh
 mkdir -p ~/Documents/correction-ledger ~/Documents/agent-rules
@@ -53,43 +55,45 @@ touch ~/Documents/agent-rules/{self,process,build,engineering,foundations}.md
 open -e ~/.codex/ledger/config.json
 ```
 
-按实际情况修改 `sources`、`vault`、`self_root`、`codex` 和 `since`。不用的来源应从配置移除；规则文件可以为空。`since` 是首次回溯起点，请先设为你想检查的近期日期。[逐项配置说明 →](docs/setup.md#配置)
+Set `sources`, `vault`, `self_root`, `codex`, and `since` for your environment. Remove sources you do not use. Rule files may be empty. Set `since`, the initial backfill timestamp, to a recent date you intend to review. See the [configuration reference](docs/setup.md#配置).
 
-**3. 检查来源，确认模型数据流。**
+### 3. Check sources and review the model data flow
 
 ```sh
 python3 ~/.codex/ledger/ledger.py scan
 ```
 
-扫描结果包含本机文件路径，只在本地查看。启用分类后，候选短片段、必要前文、规则文本及已有类别会经当前登录的 Codex CLI 发给模型服务。常见密钥、邮箱和手机号会尝试脱敏，**规则文本会原样发送，脱敏不保证覆盖所有个人信息**。
+Scan output includes local file paths and should remain private. When classification is enabled, candidate excerpts, necessary preceding context, rule text, and existing category definitions are sent through your authenticated Codex CLI to the model service. Common secrets, email addresses, and phone numbers are subject to pattern-based redaction. **Rule text is sent as written, and redaction does not guarantee removal of all personal information.**
 
-接受这一数据流后，在配置中设 `"classification_enabled": true`。
+If you accept this data flow, set `"classification_enabled": true` in the configuration.
 
-**4. 运行并查看。**
+### 4. Run and review the output
 
 ```sh
 python3 ~/.codex/ledger/process-ledger
 open ~/Documents/correction-ledger/regressions.md
 ```
 
-默认只处理已结束、文件静默 ≥ 10 分钟的轮次。`新增 0` 可能是没有符合条件的纠正，也可能仍有未结束轮次；请一起看视图顶部的来源状态。
+By default, only completed turns in files unchanged for at least 10 minutes are eligible. Zero new events may mean no eligible corrections or pending turns. Review the source status at the top of the output alongside the count. Output timestamps currently use Asia/Shanghai.
 
-确认手动运行正常后，再按[后台运行说明](docs/setup.md#后台运行)开启监听。
+After confirming a successful manual run, follow the [background service instructions](docs/setup.md#后台运行) to enable watching.
 
-## 数据放在哪里
+## Data storage
 
-| 位置 | 内容 |
+| Location | Contents |
 | --- | --- |
-| 这个仓库 | 代码、文档、虚构示例与测试 |
-| `~/.codex/ledger/` | 本机配置、游标、日志和代码备份 |
-| 你配置的 `vault` | `ledger.jsonl` 事实账本与 `regressions.md` 阅读视图 |
+| This repository | Code, documentation, fictional examples, and tests |
+| `~/.codex/ledger/` | Local configuration, cursors, logs, and code backups |
+| Your configured `vault` | The `ledger.jsonl` event ledger and `regressions.md` reading view |
 
-运行数据保留在本地，不提交到仓库。启用后的模型请求按上面的数据流发送；[完整处理过程 →](docs/how-it-works.md)
+Runtime data remains on your machine and should not be committed to the repository. Enabling classification sends model requests as described above. See [the processing and data boundaries](docs/how-it-works.md) for details.
 
-## 开发与维护
+## Development
 
 ```sh
 python3 -m unittest discover -s tests -v
 ```
 
-测试使用虚构数据，不读取真实会话、不调用模型。[目录说明与更新方式 →](docs/development.md)
+Tests use fictional data, do not read real transcripts, and do not call a model. See [repository structure and updates](docs/development.md).
+
+The README and preview are available in English and Chinese. Detailed operational documentation and generated ledger output are currently in Chinese.

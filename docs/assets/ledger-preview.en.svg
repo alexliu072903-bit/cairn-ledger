@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="750" viewBox="0 0 1440 750" role="img" aria-labelledby="title desc" xml:lang="en">
+<title id="title">Correction ledger — FICTIONAL DATA / PREVIEW</title>
+<desc id="desc">A reviewable record of corrections across local agent sessions. All messages, counts, timestamps and references are fictional. Runtime output is currently in Chinese.</desc>
+<rect width="1440" height="750" fill="#f6f5f1"/>
+<g font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Noto Sans CJK SC, Microsoft YaHei, sans-serif" fill="#242b28">
+<text x="64" y="69" font-size="19" fill="#405f50" font-weight="400">CAIRN / LEDGER</text>
+<text x="1040" y="69" font-size="17" fill="#68716b" font-weight="400">FICTIONAL DATA / PREVIEW</text>
+<text x="64" y="151" font-size="44" fill="#242b28" font-weight="600">Correction ledger</text>
+<text x="64" y="199" font-size="24" fill="#68716b" font-weight="400">A reviewable record of corrections across local agent sessions.</text>
+<rect x="64" y="226" width="1312" height="2" fill="#dcded8"/>
+<text x="64" y="278" font-size="21" fill="#68716b" font-weight="400">Last run: 2026-01-13 11:05</text>
+<text x="1040" y="278" font-size="21" fill="#405f50" font-weight="400">3 new events / 2 categories</text>
+<rect x="64" y="307" width="1312" height="56" fill="#e9ece5"/>
+<text x="78" y="344" font-size="19" fill="#68716b" font-weight="400">Category</text>
+<text x="278" y="344" font-size="19" fill="#68716b" font-weight="400">Count</text>
+<text x="348" y="344" font-size="19" fill="#68716b" font-weight="400">First seen</text>
+<text x="520" y="344" font-size="19" fill="#68716b" font-weight="400">Last seen</text>
+<text x="692" y="344" font-size="19" fill="#68716b" font-weight="400">Source</text>
+<text x="840" y="344" font-size="19" fill="#68716b" font-weight="400">Rule</text>
+<text x="986" y="344" font-size="19" fill="#68716b" font-weight="400">Excerpts</text>
+<rect x="64" y="363" width="1312" height="138" fill="#ffffff"/>
+<rect x="64" y="501" width="1312" height="1" fill="#dcded8"/>
+<rect x="64" y="501" width="1312" height="105" fill="#ffffff"/>
+<rect x="64" y="606" width="1312" height="1" fill="#dcded8"/>
+<text x="78" y="410" font-size="20" fill="#242b28" font-weight="400">Scope expansion</text>
+<text x="281" y="410" font-size="25" fill="#405f50" font-weight="400">2</text>
+<text x="348" y="410" font-size="20" fill="#242b28" font-weight="400">01-12 09:00</text>
+<text x="520" y="410" font-size="20" fill="#242b28" font-weight="400">01-13 10:00</text>
+<text x="692" y="410" font-size="20" fill="#242b28" font-weight="400">claude</text>
+<text x="692" y="439" font-size="20" fill="#242b28" font-weight="400">codex</text>
+<text x="840" y="410" font-size="17" fill="#68716b" font-weight="400">No matching rule</text>
+<text x="986" y="410" font-size="21" fill="#242b28" font-weight="400">“I asked for a comparison.</text>
+<text x="986" y="442" font-size="21" fill="#242b28" font-weight="400">Why did you start implementing?”</text>
+<text x="78" y="549" font-size="20" fill="#242b28" font-weight="400">Ignored format</text>
+<text x="281" y="549" font-size="25" fill="#405f50" font-weight="400">1</text>
+<text x="348" y="549" font-size="20" fill="#242b28" font-weight="400">01-13 11:00</text>
+<text x="520" y="549" font-size="20" fill="#242b28" font-weight="400">01-13 11:00</text>
+<text x="692" y="549" font-size="20" fill="#242b28" font-weight="400">codex</text>
+<text x="840" y="549" font-size="17" fill="#68716b" font-weight="400">No matching rule</text>
+<text x="986" y="549" font-size="21" fill="#242b28" font-weight="400">“Use the existing date format,</text>
+<text x="986" y="581" font-size="21" fill="#242b28" font-weight="400">rather than introducing another.”</text>
+<text x="986" y="485" font-size="18" fill="#68716b" font-weight="400">1 more excerpt in the full sample</text>
+<text x="64" y="675" font-size="20" fill="#68716b" font-weight="400">Condensed preview. Markdown output includes full dates, excerpts and source references.</text>
+<text x="64" y="711" font-size="18" fill="#68716b" font-weight="400">All messages, counts, timestamps and references are fictional. Runtime output is currently in Chinese.</text>
+</g>
+</svg>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="750" viewBox="0 0 1440 750" role="img" aria-labelledby="title desc" xml:lang="zh-CN">
+<title id="title">纠正记录 — 虚构数据 · 阅读示意</title>
+<desc id="desc">汇总本机 Agent 会话中的纠正，供用户回看与核对。 所有消息、次数、时间和定位均为虚构。</desc>
+<rect width="1440" height="750" fill="#f6f5f1"/>
+<g font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Noto Sans CJK SC, Microsoft YaHei, sans-serif" fill="#242b28">
+<text x="64" y="69" font-size="19" fill="#405f50" font-weight="400">CAIRN / LEDGER</text>
+<text x="1040" y="69" font-size="17" fill="#68716b" font-weight="400">虚构数据 · 阅读示意</text>
+<text x="64" y="151" font-size="44" fill="#242b28" font-weight="600">纠正记录</text>
+<text x="64" y="199" font-size="24" fill="#68716b" font-weight="400">汇总本机 Agent 会话中的纠正，供用户回看与核对。</text>
+<rect x="64" y="226" width="1312" height="2" fill="#dcded8"/>
+<text x="64" y="278" font-size="21" fill="#68716b" font-weight="400">最近一次运行：2026-01-13 11:05</text>
+<text x="1040" y="278" font-size="21" fill="#405f50" font-weight="400">新增 3 条 · 2 个类别</text>
+<rect x="64" y="307" width="1312" height="56" fill="#e9ece5"/>
+<text x="78" y="344" font-size="19" fill="#68716b" font-weight="400">类别</text>
+<text x="278" y="344" font-size="19" fill="#68716b" font-weight="400">次数</text>
+<text x="348" y="344" font-size="19" fill="#68716b" font-weight="400">首次</text>
+<text x="520" y="344" font-size="19" fill="#68716b" font-weight="400">最近</text>
+<text x="692" y="344" font-size="19" fill="#68716b" font-weight="400">来源</text>
+<text x="840" y="344" font-size="19" fill="#68716b" font-weight="400">对应规则</text>
+<text x="986" y="344" font-size="19" fill="#68716b" font-weight="400">原话与会话</text>
+<rect x="64" y="363" width="1312" height="138" fill="#ffffff"/>
+<rect x="64" y="501" width="1312" height="1" fill="#dcded8"/>
+<rect x="64" y="501" width="1312" height="105" fill="#ffffff"/>
+<rect x="64" y="606" width="1312" height="1" fill="#dcded8"/>
+<text x="78" y="410" font-size="22" fill="#242b28" font-weight="400">擅自扩大范围</text>
+<text x="281" y="410" font-size="25" fill="#405f50" font-weight="400">2</text>
+<text x="348" y="410" font-size="20" fill="#242b28" font-weight="400">01-12 09:00</text>
+<text x="520" y="410" font-size="20" fill="#242b28" font-weight="400">01-13 10:00</text>
+<text x="692" y="410" font-size="20" fill="#242b28" font-weight="400">claude</text>
+<text x="692" y="439" font-size="20" fill="#242b28" font-weight="400">codex</text>
+<text x="840" y="410" font-size="19" fill="#68716b" font-weight="400">无对应规则</text>
+<text x="986" y="410" font-size="21" fill="#242b28" font-weight="400">“我只让你比较两种方案，</text>
+<text x="986" y="442" font-size="21" fill="#242b28" font-weight="400">怎么又开始写实现了？”</text>
+<text x="78" y="549" font-size="22" fill="#242b28" font-weight="400">忽略已有格式</text>
+<text x="281" y="549" font-size="25" fill="#405f50" font-weight="400">1</text>
+<text x="348" y="549" font-size="20" fill="#242b28" font-weight="400">01-13 11:00</text>
+<text x="520" y="549" font-size="20" fill="#242b28" font-weight="400">01-13 11:00</text>
+<text x="692" y="549" font-size="20" fill="#242b28" font-weight="400">codex</text>
+<text x="840" y="549" font-size="19" fill="#68716b" font-weight="400">无对应规则</text>
+<text x="986" y="549" font-size="21" fill="#242b28" font-weight="400">“请沿用项目里的日期格式，</text>
+<text x="986" y="581" font-size="21" fill="#242b28" font-weight="400">不要再换一种。”</text>
+<text x="986" y="485" font-size="18" fill="#68716b" font-weight="400">另有 1 条摘录，见完整示例</text>
+<text x="64" y="675" font-size="20" fill="#68716b" font-weight="400">示意仅节选表格；实际输出为 Markdown，包含完整摘录、日期与原文定位。</text>
+<text x="64" y="711" font-size="18" fill="#68716b" font-weight="400">所有消息、次数、时间和定位均为虚构。</text>
+</g>
+</svg>
