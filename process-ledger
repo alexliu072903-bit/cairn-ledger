@@ -1,0 +1,5 @@
+#!/usr/bin/env python3
+import sys
+from ledger import main
+sys.argv.insert(1, 'process')
+sys.exit(main())

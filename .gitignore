@@ -1,0 +1,19 @@
+# Local configuration and all runtime data.
+config.json
+*.local.json
+state/
+runs/
+logs/
+classifier/
+state.json
+watch-state.json
+*.lock
+*.jsonl
+*.jsonl.*
+regressions.md
+backups/
+*.before-*
+test-runs/
+__pycache__/
+*.py[cod]
+.DS_Store

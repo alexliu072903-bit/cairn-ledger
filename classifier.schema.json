@@ -1,0 +1,60 @@
+{
+  "type": "object",
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": "string"
+          },
+          "category_id": {
+            "type": "string"
+          },
+          "category_name": {
+            "type": "string"
+          },
+          "quote": {
+            "type": "string"
+          },
+          "rule_ref": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "additional_info",
+              "content_edit",
+              "correction",
+              "uncertain"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "explicit_method_correction",
+              "content_edit",
+              "new_information",
+              "insufficient_evidence"
+            ]
+          }
+        },
+        "required": [
+          "event_id",
+          "category_id",
+          "category_name",
+          "quote",
+          "rule_ref",
+          "kind",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "items"
+  ],
+  "additionalProperties": false
+}

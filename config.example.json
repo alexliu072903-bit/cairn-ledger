@@ -1,0 +1,25 @@
+{
+  "sources": {
+    "claude": [
+      "~/.claude/projects"
+    ],
+    "codex": [
+      "~/.codex/sessions",
+      "~/.codex/archived_sessions"
+    ]
+  },
+  "vault": "~/Documents/correction-ledger",
+  "self_root": "~/Documents/agent-rules",
+  "since": "2026-01-01T00:00:00+00:00",
+  "debounce": 600,
+  "poll": 5,
+  "hour_limit": 4,
+  "day_limit": 24,
+  "batch_limit": 20,
+  "input_chars": 24000,
+  "timeout": 180,
+  "quote_chars": 160,
+  "codex": "~/.local/bin/codex",
+  "model": "",
+  "classification_enabled": false
+}
