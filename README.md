@@ -1,72 +1,95 @@
 # Cairn Ledger
 
-从本机 Claude Code 和 Codex transcript 中识别用户对 Agent 做法的纠正，生成可追溯、可计数的 `ledger.jsonl` 和 `regressions.md`。普通内容编辑、补充信息和不确定项不入账；同一原始消息重复扫描不重复计数。
+**让你对 Agent 的纠正，留下一本可以回看的账。**
 
-当前版本面向 macOS，Python ≥ 3.9（仅标准库），以及已登录、支持代码中所用 `codex exec` 参数的 Codex CLI。当前只覆盖本机实际存在的 Claude Code / Codex transcript；不采集 claude.ai 云端会话。来源日志格式变化可能导致解析失败，失败会显示在本地视图中。会话深链兼容性尚未验证；保留文件和行号作为定位依据。
+从本机 Claude Code 与 Codex 会话中识别「做法被纠正」的时刻，按类别汇总次数，并保留短摘录与原文定位。你可以看到哪些问题反复发生，再决定要不要调整规则。
 
-## 安装
+![纠正记录的阅读示意，全部为虚构数据](docs/assets/ledger-preview.png)
 
-仓库只保存代码与文档。运行目录必须在仓库外，安装不会加载服务，也不会启用分类。
+*示意预览，全部为虚构数据。实际产出为 Markdown 表格；[查看完整示例](docs/example-output.md)。*
+
+[试用演示](#先看产出) · [开始使用](#开始使用) · [配置与后台运行](docs/setup.md) · [机制与边界](docs/how-it-works.md)
+
+## 它会记下什么
+
+| 会话中的信号 | 处理方式 |
+| --- | --- |
+| 用户指出 Agent 擅自扩大范围、忽略约定或做错了方法 | 作为纠正候选，分类并校验后入账 |
+| 「标题改短一点」这样的普通内容编辑 | 不入账 |
+| 补充事实、新任务、初始约束 | 不入账 |
+| 缺少上下文，无法确认是否为纠正 | 不入账 |
+
+同一条原始消息最多计 1 次。重新扫描不会重复计数。它提供记录和定位，**不会自动修改你的规则**。
+
+## 先看产出
+
+macOS、Python 3.9+。演示只生成虚构数据，不需要 Codex 登录，不读取会话，不调用模型。
+
+```sh
+git clone https://github.com/alexliu072903-bit/cairn-ledger.git
+cd cairn-ledger
+python3 docs/demo.py
+```
+
+命令会输出 `regressions.md` 的临时路径。用 Markdown 编辑器打开，就能看到类别、次数、首次与最近时间、来源、对应规则和摘录。演示中的定位同样为虚构内容。
+
+## 开始使用
+
+真实会话分类还需要：已登录的 Codex CLI，以及本机 Claude Code 或 Codex transcript。当前为早期版本，日志格式和深链兼容性仍有限制，详见[覆盖范围](docs/how-it-works.md#覆盖范围)。
+
+**1. 安装到仓库外。**
 
 ```sh
 python3 install.py
 ```
 
-默认安装到 `~/.codex/ledger/`。可用 `--runtime /absolute/runtime/path` 自定义目录。已有配置和数据不会被覆盖，旧代码会复制到运行目录的 `backups/`。现有安装只更新代码可用 `python3 install.py --code-only`；已运行的 watcher 需重启才会加载 watcher 代码变化。
+代码复制到 `~/.codex/ledger/`。已有配置与数据保留，旧代码先备份；安装不会启动服务，分类默认关闭。
 
-编辑运行目录的 `config.json`：
+**2. 准备输出与规则目录，编辑配置。**
 
-- `sources`：本机日志目录；不存在的来源应从配置移除（Codex archive 目录可缺省）。
-- `vault`：输出目录，先创建；应位于此仓库外。
-- `self_root`：规则目录，需有 `self.md`、`process.md`、`build.md`、`engineering.md`、`foundations.md` 五个文件；不使用的文件可留空。只读取以 `- ` 开头的规则。
-- `codex`：本机 Codex CLI 路径；`model` 为空时使用 CLI 默认模型。
-- `since`：带时区的 ISO 时间，决定首次回溯起点。视图时间当前以 Asia/Shanghai 显示。
+```sh
+mkdir -p ~/Documents/correction-ledger ~/Documents/agent-rules
+touch ~/Documents/agent-rules/{self,process,build,engineering,foundations}.md
+open -e ~/.codex/ledger/config.json
+```
 
-路径支持 `~`。示例配置中的回溯起点只是占位，请自行设置。先检查来源（输出包含本机文件路径，不应公开）：
+按实际情况修改 `sources`、`vault`、`self_root`、`codex` 和 `since`。不用的来源应从配置移除；规则文件可以为空。`since` 是首次回溯起点，请先设为你想检查的近期日期。[逐项配置说明 →](docs/setup.md#配置)
+
+**3. 检查来源，确认模型数据流。**
 
 ```sh
 python3 ~/.codex/ledger/ledger.py scan
 ```
 
-确认授权后将 `classification_enabled` 改为 `true`，再手动运行：
+扫描结果包含本机文件路径，只在本地查看。启用分类后，候选短片段、必要前文、规则文本及已有类别会经当前登录的 Codex CLI 发给模型服务。常见密钥、邮箱和手机号会尝试脱敏，**规则文本会原样发送，脱敏不保证覆盖所有个人信息**。
+
+接受这一数据流后，在配置中设 `"classification_enabled": true`。
+
+**4. 运行并查看。**
 
 ```sh
 python3 ~/.codex/ledger/process-ledger
+open ~/Documents/correction-ledger/regressions.md
 ```
 
-默认文件静默 10 分钟后才处理，轮询间隔 5 秒。仅已结束轮次参与分类；`--force` 可绕过静默窗口，但不会绕过轮次完成、授权或额度检查。默认每小时 ≤ 4 次、每天 ≤ 24 次分类，每批 ≤ 20 条。无新工作时 watcher 不启动处理器或模型调用。
+默认只处理已结束、文件静默 ≥ 10 分钟的轮次。`新增 0` 可能是没有符合条件的纠正，也可能仍有未结束轮次；请一起看视图顶部的来源状态。
 
-## 数据与模型调用
+确认手动运行正常后，再按[后台运行说明](docs/setup.md#后台运行)开启监听。
 
-会话原文、游标、分类日志、运行配置与输出仅保存在本机，**不应提交到 Git**。本仓库没有上传这些运行文件的机制；`.gitignore` 覆盖运行目录和 JSONL 文件，但仍需在每次提交前检查暂存内容。
+## 数据放在哪里
 
-启用分类后，候选短片段、必要的前文、规则文本及已有类别会通过当前登录的 Codex CLI 发送给模型服务。正则会脱敏常见密钥、邮箱和手机号，但不能保证识别所有个人信息；规则文本会原样发送。默认关闭分类，只有接受该数据流后才开启。分类调用使用独立 cwd、`--ephemeral`、只读 sandbox 和禁用工具配置；输出经本地校验后才写入账本。分类失败不推进对应处理游标，模型调用额度仍计入。
+| 位置 | 内容 |
+| --- | --- |
+| 这个仓库 | 代码、文档、虚构示例与测试 |
+| `~/.codex/ledger/` | 本机配置、游标、日志和代码备份 |
+| 你配置的 `vault` | `ledger.jsonl` 事实账本与 `regressions.md` 阅读视图 |
 
-## 后台启动与停用
+运行数据保留在本地，不提交到仓库。启用后的模型请求按上面的数据流发送；[完整处理过程 →](docs/how-it-works.md)
 
-首次安装会在运行目录生成本机专用 plist。确认手动运行正常后：
+## 开发与维护
 
 ```sh
-mkdir -p ~/Library/LaunchAgents
-cp ~/.codex/ledger/com.cairn.ledger.plist ~/Library/LaunchAgents/
-launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.cairn.ledger.plist
-launchctl print gui/$(id -u)/com.cairn.ledger
+python3 -m unittest discover -s tests -v
 ```
 
-已有其他 label 的 ledger 服务时，不应再启动第二个实例；沿用原有服务定义。自定义运行目录时，相应替换上面的 plist 来源路径。
-
-停用：
-
-```sh
-launchctl bootout gui/$(id -u)/com.cairn.ledger
-```
-
-并将本地 `config.json` 的 `classification_enabled` 设为 `false`。停用不删除任何数据；已有其他 label 的安装应使用其实际 label。再次启动需显式 bootstrap，不会因安装脚本自动恢复。
-
-## 验证
-
-```sh
-python3 -m unittest -v test_ledger.py test_install.py
-```
-
-测试使用虚构消息和临时目录，不读取真实会话、不调用模型。运行后保留的合成数据位于被 Git 忽略的 `test-runs/` 与系统临时目录。
+测试使用虚构数据，不读取真实会话、不调用模型。[目录说明与更新方式 →](docs/development.md)

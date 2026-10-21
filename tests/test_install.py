@@ -3,8 +3,11 @@ import json
 from pathlib import Path
 import plistlib
 import tempfile
+import sys
 import unittest
 from unittest.mock import patch
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import install
 import ledger
@@ -37,7 +40,7 @@ class InstallTests(unittest.TestCase):
 
     def test_reject_runtime_inside_repository(self):
         with self.assertRaises(ValueError):
-            install.install(Path(__file__).parent / 'runtime')
+            install.install(Path(__file__).resolve().parents[1] / 'runtime')
 
     def test_main_expands_example_paths_without_reading_sources(self):
         install.install(self.runtime)

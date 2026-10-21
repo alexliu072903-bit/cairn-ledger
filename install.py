@@ -8,7 +8,12 @@ import plistlib
 import shutil
 import sys
 
-FILES = ('ledger.py', 'process-ledger', 'watch-ledger', 'classifier.schema.json')
+FILES = {
+    'ledger.py': 'ledger.py',
+    'process-ledger': 'bin/process-ledger',
+    'watch-ledger': 'bin/watch-ledger',
+    'classifier.schema.json': 'schemas/classifier.schema.json',
+}
 
 
 def install(runtime, code_only=False):
@@ -20,13 +25,13 @@ def install(runtime, code_only=False):
         raise ValueError('--code-only requires an existing runtime config.json')
     runtime.mkdir(parents=True, exist_ok=True)
     backup = runtime / 'backups' / dt.datetime.now(dt.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
-    for name in FILES:
+    for name, relative in FILES.items():
         target = runtime / name
         if target.exists():
             backup.mkdir(parents=True, exist_ok=True)
             shutil.copy2(target, backup / name)
         pending = runtime / (name + '.install-tmp')
-        shutil.copy2(source / name, pending)
+        shutil.copy2(source / relative, pending)
         os.replace(pending, target)
     if not code_only:
         config = runtime / 'config.json'
@@ -36,7 +41,7 @@ def install(runtime, code_only=False):
                 f.write((source / 'config.example.json').read_text())
             config.chmod(0o600)
         (runtime / 'logs').mkdir(exist_ok=True)
-        template = plistlib.loads((source / 'com.cairn.ledger.plist.template').read_bytes())
+        template = plistlib.loads((source / 'launchd' / 'com.cairn.ledger.plist.template').read_bytes())
         template['ProgramArguments'] = [sys.executable, str(runtime / 'watch-ledger')]
         template['WorkingDirectory'] = str(runtime)
         template['StandardOutPath'] = str(runtime / 'logs' / 'launchd.log')
